@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { PacmanLoader } from "react-spinners"; // Import the spinner
+import { PacmanLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
-import products from "../../../../../assets/product"; // Importing products array
+import products from "../../../../../assets/product";
 import ProductCard from "../../../../../components/product/ProductCard";
 
 const Viewer = () => {
@@ -11,19 +11,45 @@ const Viewer = () => {
   const startIndex = parseInt(queryParams.get("start"), 10);
 
   const [currentIndex, setCurrentIndex] = useState(startIndex);
-  const [showPrevIcon, setShowPrevIcon] = useState(false);
-  const [showNextIcon, setShowNextIcon] = useState(false);
   const [loading, setLoading] = useState(true);
-
   const [showOverlay, setShowOverlay] = useState(false);
-
   const navigate = useNavigate();
+
+  // Handle scrolling for navigation (swipe up = next, swipe down = prev)
+  useEffect(() => {
+    const handleTouch = (event) => {
+      const touch = event.touches[0];
+      if (!touch) return;
+      setTouchStart(touch.clientY);
+    };
+
+    const handleTouchEnd = (event) => {
+      const touch = event.changedTouches[0];
+      if (!touch) return;
+      const touchEnd = touch.clientY;
+
+      // Detect swipe direction
+      if (touchStart - touchEnd > 50) {
+        nextImage(); // Swipe up → Next
+      } else if (touchEnd - touchStart > 50) {
+        prevImage(); // Swipe down → Previous
+      }
+    };
+
+    let touchStart = 0;
+    document.addEventListener("touchstart", handleTouch);
+    document.addEventListener("touchend", handleTouchEnd);
+
+    return () => {
+      document.removeEventListener("touchstart", handleTouch);
+      document.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [currentIndex]);
 
   const nextImage = () => {
     if (currentIndex < images.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     } else {
-      // Navigate to the blank page when reaching the last image
       navigate("/blank");
     }
   };
@@ -35,7 +61,7 @@ const Viewer = () => {
   };
 
   const handleImageLoad = () => {
-    setLoading(false); // Image has loaded, stop showing loading screen
+    setLoading(false);
   };
 
   return (
@@ -50,16 +76,6 @@ const Viewer = () => {
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#000",
-      }}
-      onMouseMove={(e) => {
-        const { clientX } = e;
-        const { innerWidth } = window;
-        setShowPrevIcon(clientX < innerWidth / 2);
-        setShowNextIcon(clientX >= innerWidth / 2);
-      }}
-      onMouseLeave={() => {
-        setShowPrevIcon(false);
-        setShowNextIcon(false);
       }}
     >
       {loading && (
@@ -78,10 +94,13 @@ const Viewer = () => {
 
       <div
         style={{
-          maxWidth: "100%",
-          maxHeight: "100%",
-          overflow: "auto",
+          width: "100%",
+          height: "100%",
+          overflowY: "scroll",
           position: "relative",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <img
@@ -90,8 +109,8 @@ const Viewer = () => {
           style={{
             width: "100%",
             height: "auto",
+            maxHeight: "100vh",
             objectFit: "contain",
-            position: "relative",
             cursor: "pointer",
           }}
           onLoad={handleImageLoad}
@@ -115,23 +134,16 @@ const Viewer = () => {
             flexDirection: "column",
             color: "#fff",
             zIndex: 10,
+            padding: "20px",
           }}
           onClick={() => setShowOverlay(false)}
         >
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "20px",
-              justifyContent: "center",
-            }}
-          >
-            <ProductCard product={products[currentIndex]} />
-          </div>
+          <ProductCard product={products[currentIndex]} />
         </div>
       )}
 
-      {showPrevIcon && currentIndex > 0 && (
+      {/* Navigation Buttons (only on larger screens) */}
+      {window.innerWidth > 768 && currentIndex > 0 && (
         <div
           onClick={prevImage}
           style={{
@@ -151,7 +163,7 @@ const Viewer = () => {
         </div>
       )}
 
-      {showNextIcon && (
+      {window.innerWidth > 768 && (
         <div
           onClick={nextImage}
           style={{

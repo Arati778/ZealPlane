@@ -119,21 +119,21 @@ const DetailsPage = () => {
         );
         const userIp = ipResponse.data.ip;
 
-        // Set up headers, including token (if available)
+        // Prepare the headers
         const headers = {
           ...(token && { Authorization: `Bearer ${token}` }),
         };
 
-        // Send request with projectId and user IP
+        // Send request with projectId, userIp, and userId
         const response = await axiosInstance.get(
           `${apiBaseUrl}/projects/id/${projectId}`,
           {
             headers,
-            params: { userIp }, // Send IP as a query param
+            params: { userId, userIp }, // Sending userId and userIp as query parameters
           }
         );
 
-        console.log("Project details not are", response.data);
+        console.log("Project details are", response.data);
 
         // Set state variables with response data
         setProjectData(response.data.project);
@@ -144,9 +144,12 @@ const DetailsPage = () => {
         setStatus(response.data.status);
         setProfilePic(response.data.project.profilePic);
         setUserName(response.data.project.username);
-        setView(response.data.Views); // Use updated views from backend
+        setView(response.data.project.views); // Use updated views from backend
         console.log("Status is", status);
-        console.log("Views are", view);
+        console.log("Views are", response.data.totalViews);
+
+        // Log the view status message
+        console.log("View Status:", response.data.viewStatus);
       } catch (error) {
         console.error("Error fetching project details:", error);
       }

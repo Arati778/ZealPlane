@@ -72,10 +72,10 @@ const projectSchema = new mongoose.Schema(
         userId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "User",
-          default: null,
+          required: false,
         },
-        ip: { type: String, default: null },
-        viewedAt: { type: Date, default: Date.now },
+        ip: { type: String, required: false },
+        viewedAt: { type: String, required: true },
       },
     ],
   },

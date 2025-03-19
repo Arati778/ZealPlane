@@ -23,39 +23,95 @@ const getAllProjects = async (req, res) => {
 
 const getProjectById = async (req, res) => {
   try {
-    const projectId = req.params.projectId;
-    const userId = req.user ? req.user.id : null; // Authenticated user ID
-    const userIp =
-      req.headers["x-forwarded-for"]?.split(",")[0] || req.socket.remoteAddress; // User IP
+    console.log("Received request to fetch project details.");
 
+    const projectId = req.params.projectId;
+    console.log("Extracted projectId:", projectId);
+
+    const userId = req.user?.id || req.body.userId || null;
+    console.log("Extracted userId:", userId);
+
+    const userIp = req.headers["x-forwarded-for"]?.split(",")[0];
+    console.log("Extracted user IP:", userIp);
+
+    // Fetch the project from the database
     const project = await Project.findOne({ projectId });
 
     if (!project) {
+      console.log("Project not found in the database.");
       return res.status(404).json({ message: "Project not found" });
     }
 
+    console.log("Project found:", project);
+
     // Check if the userId or IP has already viewed the project
     const hasViewed = project.viewers.some(
-      (viewer) => viewer.userId?.toString() === userId || viewer.ip === userIp
+      (viewer) =>
+        (userId && viewer.userId?.toString() === userId) ||
+        (!userId && viewer.ip === userIp)
     );
 
+    console.log("Has user already viewed the project?", hasViewed);
+
+    let viewStatus = "";
+
     if (!hasViewed) {
-      await Project.findByIdAndUpdate(
+      console.log("New view detected, recording the view.");
+
+      // Human-readable timestamp in the format: dd-MM-yyyy hh:mm A
+      const readableTimestamp = new Date().toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
+
+      console.log("Generated timestamp:", readableTimestamp);
+
+      const viewerData = userId
+        ? { userId, viewedAt: readableTimestamp }
+        : { ip: userIp, viewedAt: readableTimestamp };
+
+      console.log("Viewer data to be added:", viewerData);
+
+      // Update the project document
+      const updatedProject = await Project.findByIdAndUpdate(
         project._id,
         {
-          $inc: { views: 1 }, // Increment views
-          $push: { viewers: { userId, ip: userIp, viewedAt: new Date() } }, // Store the viewer
+          $inc: { views: 1 },
+          $push: { viewers: viewerData },
         },
         { new: true }
       );
+
+      if (!updatedProject) {
+        console.log("Failed to update project with new view.");
+      } else {
+        console.log("Project successfully updated with new view.");
+        console.log("Updated project data:", updatedProject);
+      }
+
+      project.views += 1;
+      project.viewers.push(viewerData);
+      viewStatus = "New view recorded successfully.";
+    } else {
+      viewStatus = userId
+        ? "Duplicate view detected for this userId."
+        : "Duplicate view detected for this IP address.";
+      console.log(viewStatus);
     }
 
+    console.log("Final response being sent.");
     res.status(200).json({
       project,
-      totalViews: project.views + (hasViewed ? 0 : 1), // Return updated views
-      viewers: project.viewers, // Return viewer list
+      totalViews: project.views,
+      viewers: project.viewers,
+      viewStatus,
     });
   } catch (err) {
+    console.error("Error fetching project:", err.message);
     res.status(500).json({ message: err.message });
   }
 };

@@ -38,6 +38,7 @@ const AvatarComponent = () => {
   const [isMobile, setIsMobile] = useState(false);
   const { id } = useParams();
   const [email, setEmail] = useState(false);
+  const [mobile, setMobile] = useState(false);
   const [isEnquiryModalOpen, setIsEnquiryModalOpen] = useState(false);
   const handleEnquiryOpen = () => setIsEnquiryModalOpen(true);
   const handleEnquiryClose = () => setIsEnquiryModalOpen(false);
@@ -74,6 +75,7 @@ const AvatarComponent = () => {
         console.log("User details fetched:", response.data.user);
         setUserDetails(response.data.user);
         setEmail(response.data.user.email);
+        setMobile(response.data.contactNumber);
         setResponse(response.data);
         setProfilePic(response.data.user.profilePic);
         setStatus(response.data.status);
@@ -267,7 +269,7 @@ const AvatarComponent = () => {
                       <EnquiryModal
                         open={isEnquiryModalOpen}
                         onClose={handleEnquiryClose}
-                        phoneNumber="1234567890" // Pass WhatsApp number
+                        mobileNumber={mobile} // Pass WhatsApp number
                         emailAddress={email} // Pass email address
                       />
                     </Col>
@@ -454,7 +456,7 @@ const AvatarComponent = () => {
                         <EnquiryModal
                           open={isEnquiryModalOpen}
                           onClose={handleEnquiryClose}
-                          phoneNumber="1234567890" // Pass WhatsApp number
+                          mobileNumber={mobile} // Pass WhatsApp number
                           emailAddress={email} // Pass email address
                         />
                       </Col>

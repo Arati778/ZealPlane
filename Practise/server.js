@@ -23,7 +23,7 @@ const cors = require("cors");
 
 app.use(
   cors({
-    // origin: ["http://localhost:5000"],
+    origin: ["http://localhost:5173"],
     origin: ["http://comicplane.site", "https://comicplane.site"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // If you're using cookies or sessions
