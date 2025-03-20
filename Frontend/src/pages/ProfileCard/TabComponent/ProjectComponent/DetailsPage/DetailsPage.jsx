@@ -133,8 +133,6 @@ const DetailsPage = () => {
             params: { userId, userIp }, // Sending userId and userIp as query parameters
           }
         );
-        console.log("Sending userId:", userId);
-
         console.log("Project details are", response.data);
 
         // Set state variables with response data
