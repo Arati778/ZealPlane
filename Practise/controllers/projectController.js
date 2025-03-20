@@ -27,7 +27,7 @@ const getProjectById = async (req, res) => {
     const projectId = req.params.projectId;
     console.log("Extracted projectId:", projectId);
 
-    const userId = req.user?.id || req.body.userId || null;
+    const userId = req.query.userId || req.body.userId || req.user?.id;
     console.log("Extracted userId:", userId);
 
     const userIp =

@@ -5,7 +5,7 @@ import axiosInstance from "../../Auth/Axios";
 
 const SettingsPage = () => {
   const navigate = useNavigate();
-  const [mobileNumber, setMobileNumber] = useState("");
+  const [contactNumber, setContactNumber] = useState("");
   const [address, setAddress] = useState("");
   const [verificationStatus, setVerificationStatus] = useState(null);
   const userIdLocalStorage = localStorage.getItem("Id");
@@ -19,7 +19,7 @@ const SettingsPage = () => {
         const userData = response.data.user;
         console.log("user data is", userData);
 
-        setMobileNumber(userData.contactNumber || "");
+        setContactNumber(userData.contactNumber || "");
         setAddress(userData.address || "");
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -43,16 +43,32 @@ const SettingsPage = () => {
   };
 
   const handleUpdateInfo = async () => {
-    if (!mobileNumber && !address) {
+    if (!contactNumber && !address) {
       alert("Please enter at least one field to update.");
       return;
     }
 
     try {
-      await axiosInstance.put(`/users/${userIdLocalStorage}`, {
-        ...(mobileNumber && { mobileNumber }),
-        ...(address && { address }),
-      });
+      const token = localStorage.getItem("token"); // Retrieve token from local storage
+
+      if (!token) {
+        alert("Authentication token is missing. Please log in again.");
+        return;
+      }
+
+      await axiosInstance.put(
+        `/users/${userIdLocalStorage}`,
+        {
+          ...(contactNumber && { contactNumber }),
+          ...(address && { address }),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Attach token in headers
+          },
+        }
+      );
+
       alert("Information updated successfully!");
     } catch (error) {
       console.error("Error updating information:", error);
@@ -111,8 +127,8 @@ const SettingsPage = () => {
         <input
           type="text"
           placeholder="Enter new mobile number"
-          value={mobileNumber}
-          onChange={(e) => setMobileNumber(e.target.value)}
+          value={contactNumber}
+          onChange={(e) => setContactNumber(e.target.value)}
         />
         <label>Address:</label>
         <input

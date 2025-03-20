@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   IconButton,
@@ -93,6 +93,7 @@ const DetailsPage = () => {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [view, setView] = useState(false);
   const [userDetails, setUserDetails] = useState("");
+  const hasFetched = useRef(false);
 
   const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -132,6 +133,7 @@ const DetailsPage = () => {
             params: { userId, userIp }, // Sending userId and userIp as query parameters
           }
         );
+        console.log("Sending userId:", userId);
 
         console.log("Project details are", response.data);
 

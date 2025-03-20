@@ -70,8 +70,7 @@ const projectSchema = new mongoose.Schema(
     viewers: [
       {
         userId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
+          type: String,
           required: false,
         },
         ip: { type: String, required: false },
