@@ -20,7 +20,6 @@ const getAllProjects = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
 const getProjectById = async (req, res) => {
   try {
     console.log("Received request to fetch project details.");
@@ -31,7 +30,9 @@ const getProjectById = async (req, res) => {
     const userId = req.user?.id || req.body.userId || null;
     console.log("Extracted userId:", userId);
 
-    const userIp = req.headers["x-forwarded-for"]?.split(",")[0];
+    const userIp =
+      req.headers["x-forwarded-for"]?.split(",")[0] ||
+      req.connection.remoteAddress;
     console.log("Extracted user IP:", userIp);
 
     // Fetch the project from the database
@@ -53,12 +54,15 @@ const getProjectById = async (req, res) => {
 
     console.log("Has user already viewed the project?", hasViewed);
 
-    let viewStatus = "";
+    let viewStatus = "View count updated.";
 
+    // Always increment view counter
+    let updateData = { $inc: { views: 1 } };
+
+    // If a new user is found (either by userId or IP), record it
     if (!hasViewed) {
-      console.log("New view detected, recording the view.");
+      console.log("New viewer detected, adding to the viewers list.");
 
-      // Human-readable timestamp in the format: dd-MM-yyyy hh:mm A
       const readableTimestamp = new Date().toLocaleString("en-GB", {
         day: "2-digit",
         month: "2-digit",
@@ -76,38 +80,30 @@ const getProjectById = async (req, res) => {
 
       console.log("Viewer data to be added:", viewerData);
 
-      // Update the project document
-      const updatedProject = await Project.findByIdAndUpdate(
-        project._id,
-        {
-          $inc: { views: 1 },
-          $push: { viewers: viewerData },
-        },
-        { new: true }
-      );
+      updateData.$push = { viewers: viewerData };
 
-      if (!updatedProject) {
-        console.log("Failed to update project with new view.");
-      } else {
-        console.log("Project successfully updated with new view.");
-        console.log("Updated project data:", updatedProject);
-      }
+      viewStatus = "New viewer recorded successfully.";
+    }
 
-      project.views += 1;
-      project.viewers.push(viewerData);
-      viewStatus = "New view recorded successfully.";
+    // Update the project document
+    const updatedProject = await Project.findByIdAndUpdate(
+      project._id,
+      updateData,
+      { new: true }
+    );
+
+    if (!updatedProject) {
+      console.log("Failed to update project with new view.");
     } else {
-      viewStatus = userId
-        ? "Duplicate view detected for this userId."
-        : "Duplicate view detected for this IP address.";
-      console.log(viewStatus);
+      console.log("Project successfully updated.");
+      console.log("Updated project data:", updatedProject);
     }
 
     console.log("Final response being sent.");
     res.status(200).json({
-      project,
-      totalViews: project.views,
-      viewers: project.viewers,
+      project: updatedProject,
+      totalViews: updatedProject.views,
+      viewers: updatedProject.viewers,
       viewStatus,
     });
   } catch (err) {

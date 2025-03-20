@@ -501,6 +501,22 @@
 }
 
 
+
+
+
+
+
+@media  (max-width: 1024px) {
+  .swiper-nav-buttons {
+    width: 95%; /* Arrows will stay inside swiper */
+    
+    position: absolute;
+  }
+
+ }
+
+
+
 // thumbanil
 
 .thumbImg{

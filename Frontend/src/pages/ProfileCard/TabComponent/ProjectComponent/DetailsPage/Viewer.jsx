@@ -126,7 +126,7 @@ const Viewer = () => {
             top: 0,
             left: 0,
             width: "100%",
-            height: "100%",
+            height: window.innerWidth > 768 ? "100%" : "auto",
             backgroundColor: "rgba(0, 0, 0, 0.8)",
             display: "flex",
             alignItems: "center",
@@ -143,9 +143,10 @@ const Viewer = () => {
       )}
 
       {/* Navigation Buttons (only on larger screens) */}
-      {window.innerWidth > 768 && currentIndex > 0 && (
+      {currentIndex > 0 && (
         <div
           onClick={prevImage}
+          className="arrow-button"
           style={{
             position: "absolute",
             top: "50%",
@@ -163,25 +164,24 @@ const Viewer = () => {
         </div>
       )}
 
-      {window.innerWidth > 768 && (
-        <div
-          onClick={nextImage}
-          style={{
-            position: "absolute",
-            top: "50%",
-            right: "10px",
-            transform: "translateY(-50%)",
-            cursor: "pointer",
-            padding: "10px",
-            borderRadius: "50%",
-            backgroundColor: "rgba(0, 0, 0, 0.7)",
-            color: "#fff",
-            zIndex: 1,
-          }}
-        >
-          <FaChevronRight size={30} />
-        </div>
-      )}
+      <div
+        onClick={nextImage}
+        className="arrow-button"
+        style={{
+          position: "absolute",
+          top: "50%",
+          right: "10px",
+          transform: "translateY(-50%)",
+          cursor: "pointer",
+          padding: "10px",
+          borderRadius: "50%",
+          backgroundColor: "rgba(0, 0, 0, 0.7)",
+          color: "#fff",
+          zIndex: 1,
+        }}
+      >
+        <FaChevronRight size={30} />
+      </div>
     </div>
   );
 };
