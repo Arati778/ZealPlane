@@ -84,8 +84,15 @@ const CreatePost = () => {
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  const detectUrls = (text) => {
+    return text.replace(
+      /(https?:\/\/[^\s]+)/g,
+      '<a href="$1" target="_blank" style="color:blue; text-decoration:underline;">$1</a>'
+    );
+  };
+
   const handleBodyChange = (value) => {
-    setFormData({ ...formData, body: value });
+    setFormData({ ...formData, body: detectUrls(value) });
   };
 
   const handleImageInsert = (e) => {
@@ -210,6 +217,29 @@ const CreatePost = () => {
                 required
                 placeholder="Write your post content here..."
                 className="quill"
+                modules={{
+                  toolbar: [
+                    [{ header: [1, 2, false] }],
+                    ["bold", "italic", "underline", "strike"],
+                    [{ list: "ordered" }, { list: "bullet" }],
+                    ["link", "image"],
+                    [{ color: [] }, { background: [] }],
+                    ["clean"],
+                  ],
+                }}
+                formats={[
+                  "header",
+                  "bold",
+                  "italic",
+                  "underline",
+                  "strike",
+                  "list",
+                  "bullet",
+                  "link",
+                  "image",
+                  "color",
+                  "background",
+                ]}
               />
             </div>
             <div className="form-group">

@@ -110,8 +110,8 @@
 }
 .head-top p{
     font-family: 'Inter' ;
-    font-size: 18px;
-    color: rgb(207, 205, 198);
+    font-size: 21px;
+    color: rgb(189, 188, 186);
     line-height: 26px;
     letter-spacing: 1px;
     text-align: start;
@@ -121,6 +121,7 @@
 
 .cardBox {
     margin-left: 80px;
+   
     margin-right: 80px;
     margin-top: 50px;
     display: flex;
@@ -129,6 +130,7 @@
 }
 
 .card1 {
+    
     position: relative;
     margin: 5px 15px;
   padding: 2.2rem;
@@ -186,11 +188,25 @@
         margin: 5px 20px 10px;
     }
     
-.cardBox{
-    flex-direction: column;
-    margin: 20px 10px;
-    gap: 5px;
-}
+    .cardBox {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2 columns layout */
+        gap: 10px; /* Space between cards */
+        margin: 20px 10px;
+    }
+
+    .card1 {
+        padding: 1.5rem;
+        text-align: center;
+        margin: 0;
+    }
+
+    .featureImage {
+        width: 100%;
+        max-width: 150px; /* Adjust image size */
+        display: block;
+        margin: 0 auto;
+    }
 .card1 h1{
     font-size: 25px;
 }

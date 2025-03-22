@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./AboutCardStyle.css";
-import growth from "../assets/growth.png";
-import reflecting from "../assets/reflecting.png";
+import growth from "../assets/aghori9.jpg";
+import reflecting from "../assets/dehek-eng.jpg";
+import god from "../assets/gameofdeath.jpg";
 import bumba from "../assets/landingimage.jpg";
 
 const AboutCard = () => {
@@ -85,71 +86,29 @@ const AboutCard = () => {
             </div>
           </div>
 
-          <div className="backa-image">
+          {/* <div className="backa-image">
             <img src={bumba} alt="" />
-          </div>
+          </div> */}
         </div>
 
-        <h1 className={`demon-slayer-title ${isVisible ? "visible" : ""}`}>
+        {/* <h1 className={`demon-slayer-title ${isVisible ? "visible" : ""}`}>
           Many Great Features
-        </h1>
+        </h1> */}
       </div>
 
       <div className="cardBox">
         <div className="card1">
-          <h1>Discover</h1>
-          <p>
-            <span>Explore the Universe: </span>Browse our vast library of comics
-            and discover new favorites.
-            <br />
-            <span>New Releases: </span> Stay up-to-date with the latest comic
-            book releases.
-            <br />
-            <span>Staff Picks:</span> Check out our team's favorite comics and
-            get inspired.
-          </p>
           <img src={growth} alt="About feature" className="featureImage" />
         </div>
         <div className="card1">
-          <h1>Connect</h1>
-          <p>
-            <span>Join the Conversation: </span>Participate in our forums and
-            discuss your favorite comics with fellow fans.
-            <br />
-            <span>Community Events:</span> Attend online events, webinars, and
-            workshops to connect with other enthusiasts.
-            <br />
-            <span>Make Friends:</span> Connect with like-minded fans and build
-            lasting relationships.
-          </p>
           <img src={reflecting} alt="About feature" className="featureImage" />
         </div>
         <div className="card1">
-          <h1>Create</h1>
-          <p>
-            <span>Share Your Art:</span> Showcase your comic book-inspired
-            artwork and get feedback from the community.
-            <br />
-            <span>Write Your Story:</span> Share your own comic book stories and
-            scripts with the community.
-            <br />
-            <span>Get Feedback:</span> Receive constructive feedback from fellow
-            creators and improve your craft.
-          </p>
-          <img src={growth} alt="About feature" className="featureImage" />
+          <img src={bumba} alt="About feature" className="featureImage" />
         </div>
-        {/* <div className="card1">
-          <h1>Learn</h1>
-          <p>
-            <span>Comic Book News:</span> Stay up-to-date with the latest comic
-            book news and updates.
-            <span>Tutorials and Guides: </span> Access tutorials, guides, and
-            resources to help you improve your comic book knowledge.
-            <span>Industry Insights:</span> - Get insights from comic book
-            professionals and learn about the industry.
-          </p>
-          <img src={growth} alt="About feature" className="featureImage" />
-        </div> */}
+        <div className="card1">
+          <img src={god} alt="About feature" className="featureImage" />
+        </div>
       </div>
     </>
   );

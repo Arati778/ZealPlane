@@ -6,6 +6,12 @@
   gap: 20px; /* Adds spacing between the sidebar and create-post */
 }
 
+.ql-editor a {
+  color: blue !important;
+  text-decoration: underline;
+}
+
+
 .create-post {
   width: 500px;
   padding: 20px;

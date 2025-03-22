@@ -1,5 +1,5 @@
     .form-container {
-        max-width: 600px;  
+        max-width: 800px;  
         margin: auto;
         padding: 25px;
         background: #2c2c2c; 
@@ -10,7 +10,8 @@
 
     h2 {
         text-align: center;
-        color: #ff6b6b; 
+        color: #ff4f00; 
+        text-transform: uppercase;
     }
 
     label {
@@ -36,7 +37,7 @@
     .form-container button {
         width: 100%;
         padding: 12px;
-        background: #ff6b6b; 
+        background: #ff4f00; 
         color: white;
         border: none;
         border-radius: 6px;
