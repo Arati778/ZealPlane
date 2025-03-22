@@ -24,8 +24,12 @@ const Navbar = () => {
         </span>
       </div>
       <div className="nav-menu">
-        <button onClick={handleLoginClick}>Log in</button>
-        <button onClick={handleRegisterClick}>Join ZealPlane</button>
+        <button onClick={handleLoginClick} className="btn1">
+          Login
+        </button>
+        <button onClick={handleRegisterClick} className="btn2">
+          Join ZealPlane
+        </button>
       </div>
       <Modal show={showLoginModal} handleClose={handleCloseLoginModal}>
         <LoginComponent />

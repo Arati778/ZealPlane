@@ -45,10 +45,21 @@
   color: whitesmoke;
   font-size: 16px;
   cursor: pointer;
-  padding: 10px 15px;
+  padding: 6px 10px;
   transition: background-color 0.3s;
 }
+ .nav-menu button.btn2{
+  background:#ff6600;
+  padding: 7px 14px;
+  border-radius: 30px;
+}
+.nav-menu button.btn2:hover{
+  background: #ff4f00 ;
+}
 
+.nav-menu button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
 
 
 

@@ -64,12 +64,7 @@
 // export default Footer;
 
 import React from "react";
-import {
-  FaFacebookF,
-  FaInstagram,
-  FaTwitter,
-  FaLinkedin,
-} from "react-icons/fa";
+import { FaFacebookF, FaTwitter, FaLinkedin, FaWhatsapp } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../store/userAction";
@@ -107,7 +102,7 @@ const Footer = () => {
         {/* Social Media Icons */}
         <div className="socialIcons">
           <a
-            href=""
+            href="https://www.facebook.com/groups/683526374340078/?ref=share&mibextid=NSMWBT"
             target="_blank"
             rel="noopener noreferrer"
             className="icon facebook"
@@ -115,15 +110,15 @@ const Footer = () => {
             <FaFacebookF />
           </a>
           <a
-            href=""
+            href="https://chat.whatsapp.com/LyKc7CvcEL6KWf3XApw9p2"
             target="_blank"
             rel="noopener noreferrer"
-            className="icon instagram"
+            className="icon whatsapp"
           >
-            <FaInstagram />
+            <FaWhatsapp />
           </a>
           <a
-            href=""
+            href="https://x.com/plane38843"
             target="_blank"
             rel="noopener noreferrer"
             className="icon twitter"
