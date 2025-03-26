@@ -270,7 +270,6 @@ const ProjectModal = ({ open, onClose, onSubmit }) => {
             </FormHelperText>
           )}
         </FormControl>
-
         <TextField
           margin="dense"
           placeholder="Add Tags"

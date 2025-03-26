@@ -57,6 +57,7 @@ import EditImageModal from "./EditProject/EditImageModal";
 import { Link } from "react-router-dom";
 import ReportModal from "./Report/Report";
 import { FaEye } from "react-icons/fa";
+import linkifyHtml from "linkify-html";
 
 const DetailsPage = () => {
   const { projectId } = useParams();
@@ -535,10 +536,12 @@ const DetailsPage = () => {
                 <div className="description-container">
                   <div
                     className="description1"
+                    style={{ color: "#fff" }}
                     dangerouslySetInnerHTML={{
-                      __html: projectData.description,
+                      __html: linkifyHtml(projectData.description),
                     }}
                   />
+
                   <div className="tags-views-container">
                     <div className="tags">
                       {projectData.tags && projectData.tags.length > 0 ? (
@@ -613,9 +616,9 @@ const DetailsPage = () => {
               </div>
               <div className="user-details">
                 <h3 className="username">{userName}</h3>
-                <p className="user-description">
-                  Web Developer | Graphic Designer | ZealPlane Seller
-                </p>
+                {/* <p className="user-description">
+                  Web Developer | Graphic Designer | ZealPlane
+                </p> */}
                 {/* <br /> */}
                 <div className="user-actions">
                   <div className="like-info">

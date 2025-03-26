@@ -1,7 +1,7 @@
 .post-header {
     position: relative; /* Enable absolute positioning for the edit icon */
     background-color: #1e1e1e;
-    padding: 20px;
+    padding: 10px;
     border-radius: 8px;
     color: #ffffff;
   
@@ -55,10 +55,14 @@
       overflow-wrap: break-word;
       white-space: pre-wrap;
       p {
-        font-size: 1rem;
+        font-size: 14px;
         line-height: 1.6;
         color: #cccccc;
       }
+      .post-body a:hover {
+        text-decoration: none; /* Underline remove on hover */
+      }
+      
   
       .post-image {
         display: flex;

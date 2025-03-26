@@ -57,10 +57,10 @@ const ProfileCard = () => {
         setStatus(response.data);
 
         setData({
-          fullName: fullName || "Enter Your Full Name",
-          description: description || "Your Description!",
-          jobRole: jobRole || "Your Profession",
-          location: location || "Your Location",
+          fullName: fullName || "Update Your Full Name",
+          description: description || "Update Description!",
+          jobRole: jobRole || "Update Profession",
+          location: location || "Update Location",
         });
 
         setFormData({
@@ -225,7 +225,7 @@ const ProfileCard = () => {
             type="text"
             name="fullname"
             value={formData.fullname}
-            placeholder="Your Full Name"
+            placeholder="Full Name"
             onChange={handleInputChange}
             style={{ marginBottom: "5px", width: "100%", fontSize: "18px" }}
           />
@@ -245,7 +245,7 @@ const ProfileCard = () => {
             type="text"
             name="location"
             value={formData.location}
-            placeholder="Your Location"
+            placeholder="Location"
             onChange={handleInputChange}
             style={{ marginBottom: "5px", width: "100%" }}
           />

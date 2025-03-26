@@ -235,6 +235,8 @@ const modalStyles = {
   flexDirection: "column",
   alignItems: "center",
   position: "relative",
+  maxHeight: "80vh", // Limits the height to 80% of the viewport height
+  overflowY: "auto", // Adds vertical scroll when content exceeds the height
 };
 
 export default EditImageUpdate;

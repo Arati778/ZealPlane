@@ -553,28 +553,43 @@ import "swiper/css/autoplay";
 import "swiper/css/pagination";
 import Anonimous from "../../../../public/anonymous-profile-silhouette-b714qekh29tu1anb.png";
 
-// TruncatedDescription Component
+// // TruncatedDescription Component
+// const TruncatedDescription = ({ description, maxLength = 100 }) => {
+//   const [isExpanded, setIsExpanded] = useState(false);
+
+//   const toggleReadMore = () => {
+//     setIsExpanded(!isExpanded);
+//   };
+
+//   return (
+//     <div className="description">
+//       <span
+//         dangerouslySetInnerHTML={{
+//           __html: isExpanded
+//             ? description
+//             : `${description.substring(0, maxLength)}..`,
+//         }}
+//       />
+//       {description.length > maxLength && (
+//         <span className="readMore" onClick={toggleReadMore}>
+//           {isExpanded ? "" : ""}
+//         </span>
+//       )}
+//     </div>
+//   );
+// };
+
 const TruncatedDescription = ({ description, maxLength = 100 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const toggleReadMore = () => {
-    setIsExpanded(!isExpanded);
-  };
-
   return (
     <div className="description">
       <span
         dangerouslySetInnerHTML={{
-          __html: isExpanded
-            ? description
-            : `${description.substring(0, maxLength)}..`,
+          __html:
+            description.length > maxLength
+              ? `${description.substring(0, maxLength)}..`
+              : description,
         }}
       />
-      {description.length > maxLength && (
-        <span className="readMore" onClick={toggleReadMore}>
-          {isExpanded ? ".." : "."}
-        </span>
-      )}
     </div>
   );
 };
@@ -725,7 +740,10 @@ const HeroBanner = ({ selectedPosterUrl }) => {
               />
 
               {/* Overlay */}
-              <div className="slide-overlay">
+              <div
+                className="slide-overlay"
+                onClick={() => navigate(`/details/${project.projectId}`)}
+              >
                 <h3>{project.name}</h3>
                 <TruncatedDescription description={project.description} />
 
@@ -813,7 +831,7 @@ const HeroBanner = ({ selectedPosterUrl }) => {
             left: 0;
             width: 100%;
             height: 210px;
-            background: linear-gradient(to top, rgba(0, 0, 0, 1.5), transparent);
+            background: linear-gradient(to top, rgba(0, 0, 0, 1.9), transparent);
             display: flex;
             flex-direction: column;
             justify-content: flex-end;

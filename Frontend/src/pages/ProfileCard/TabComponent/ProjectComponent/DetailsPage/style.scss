@@ -503,24 +503,24 @@
 
 
 
-// @media  (max-width: 1106px) {
-//   .swiper-nav-buttons {
-//     width: 80%; /* Arrows will stay inside swiper */
+@media  (max-width: 1106px) {
+  .swiper-nav-buttons {
+    width: 80%; /* Arrows will stay inside swiper */
     
-//     position: absolute;
-//   }
+    position: absolute;
+  }
 
  
 
-//   .custom-next {
-//     right: -15px;
-//   }
-// }
+  .custom-next {
+    right: -76px;
+  }
+}
 
 
-// @media  (max-width: 1024px) {
+// @media  (min-width: 1180px) {
 //   .swiper-nav-buttons {
-//     width: 95%; /* Arrows will stay inside swiper */
+//     width: 90%; /* Arrows will stay inside swiper */
     
 //     position: absolute;
 //   }
@@ -712,6 +712,17 @@
   }
 }
 
+.description1 a {
+  color: #1e90ff; /* Default link color */
+  text-decoration: underline; /* Default underline */
+}
+
+.description1 a:hover {
+  text-decoration: none; /* Underline remove on hover */
+}
+
+
+
 .project-description{
   border-radius: 3px;
   padding: 5px;
@@ -808,7 +819,7 @@
     font-size: 12px; /* Adjust font size */
   }
   .User-Profile{
-    display: contents;
+    display: flex;
     width: 77vw;
   }
   .plus-icon{

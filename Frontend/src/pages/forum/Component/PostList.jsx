@@ -4,6 +4,7 @@ import { BiUpvote } from "react-icons/bi";
 import { FaRegCommentAlt, FaRegShareSquare, FaArrowUp } from "react-icons/fa";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import linkifyHtml from "linkify-html";
 import "./postList.scss";
 
 const PostList = ({ initialPosts }) => {
@@ -104,7 +105,7 @@ const PostList = ({ initialPosts }) => {
                 </div>
               )}
 
-              <PostBody body={post.body} />
+              <PostBody body={linkifyHtml(post.body)} />
 
               <div className="post-meta">
                 <div
@@ -159,7 +160,7 @@ const PostBody = ({ body }) => {
           __html: isExpanded
             ? body || "No content available"
             : body && body.length > 1000
-            ? body.substring(0, 1000) + "..."
+            ? body.substring(0, window.innerWidth <= 768 ? 500 : 1000) + "..."
             : body || "No content available",
         }}
         style={{ whiteSpace: "pre-wrap" }}

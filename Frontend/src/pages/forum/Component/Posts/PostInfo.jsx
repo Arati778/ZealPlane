@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import "./PostInfo.scss";
 import EditPostModal from "./EditPostModal";
+import linkifyHtml from "linkify-html";
 
 const PostInfo = ({ post, onEdit, onDelete, status }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -59,7 +60,7 @@ const PostInfo = ({ post, onEdit, onDelete, status }) => {
         <p
           className="post-body"
           dangerouslySetInnerHTML={{
-            __html: post.body || "No content available",
+            __html: linkifyHtml(post.body || "No content available"),
           }}
           style={{ whiteSpace: "pre-wrap" }}
         ></p>

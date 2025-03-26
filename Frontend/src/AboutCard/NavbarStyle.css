@@ -87,6 +87,11 @@
     font-size: 15px;
     
   }
+  .nav-menu button.btn2{
+    background:#ff6600;
+    padding: 5px 12px;
+    border-radius: 30px;
+  }
 }
 
 @media screen and (max-width: 850px) {
