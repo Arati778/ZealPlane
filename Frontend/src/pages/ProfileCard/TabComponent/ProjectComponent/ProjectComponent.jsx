@@ -214,7 +214,7 @@ const ProjectComponent = () => {
               className="card"
               key={index}
               style={{
-                width: window.innerWidth <= 768 ? "165px" : "500px",
+                width: window.innerWidth <= 768 ? "155px" : "320px",
                 height: window.innerWidth <= 768 ? "180px" : "260px",
                 margin: "5px",
                 flex: "0 0 auto",

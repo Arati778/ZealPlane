@@ -197,7 +197,7 @@ const AvatarComponent = () => {
 
       <ContentWrapper>
         <div className="row">
-          {<FaEdit />}
+          {/* {<FaEdit />} */}
           {isMobile ? (
             <div style={{ marginTop: "70px" }}>
               <div
@@ -353,7 +353,7 @@ const AvatarComponent = () => {
                   <RadarChartExample />
                 </div>
               </div>
-              <div
+              {/* <div
                 className="card"
                 style={{ background: "rgba(55, 65, 122, 0.1)", color: "white" }}
               >
@@ -364,7 +364,7 @@ const AvatarComponent = () => {
                     color: "white",
                   }}
                 ></div>
-              </div>
+              </div> */}
             </div>
           ) : (
             <>
