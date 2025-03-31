@@ -45,10 +45,7 @@ const projectSchema = new mongoose.Schema(
     thumbnailImages: [{ type: String }],
     images: [{ type: String }],
     username: { type: String, required: true }, // Project creator's username
-    uniqueId: {
-      // Added to associate the project with a specific user
-      type: String,
-    },
+    uniqueId: { type: String }, // Associate the project with a specific user
     projectId: {
       type: mongoose.Schema.Types.ObjectId,
       default: () => new mongoose.Types.ObjectId(),
@@ -77,6 +74,7 @@ const projectSchema = new mongoose.Schema(
         viewedAt: { type: String, required: true },
       },
     ],
+    status: { type: String, required: true }, // Added status field (required)
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields

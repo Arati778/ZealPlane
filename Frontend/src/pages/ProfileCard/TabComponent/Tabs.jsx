@@ -27,10 +27,10 @@ const TabComponent = () => {
       key: "thoughts",
       label: "Thoughts",
     },
-    {
-      key: "feedback",
-      label: "Feedback",
-    },
+    // {
+    //   key: "feedback",
+    //   label: "Feedback",
+    // },
   ];
 
   const contentList = {
@@ -63,7 +63,7 @@ const TabComponent = () => {
           </button>
         </div>
       ),
-    feedback: <FeedbackComponent />,
+    // feedback: <FeedbackComponent />,
   };
 
   // Simulate ProjectComponent loading

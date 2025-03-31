@@ -153,7 +153,7 @@ const ProfileCard = () => {
       marginRight: "-50%",
       transform: "translate(-50%, -50%)",
       width: window.innerWidth <= 768 ? "90%" : "40%",
-      height: "85%",
+      // height: "85%",
       backgroundColor: "white",
       color: "black",
       padding: "20px",

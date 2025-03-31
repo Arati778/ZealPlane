@@ -27,8 +27,10 @@ const getProjectById = async (req, res) => {
     const projectId = req.params.projectId;
     console.log("Extracted projectId:", projectId);
 
-    const userId = req.query.userId || req.body.userId || req.user?.id;
-    console.log("Extracted userId:", userId);
+    const userId = req.user?.id; // Get unique userId from token
+    const usernameFromToken = req.user?.username; // Extract username from token
+    console.log("Extracted userId from token:", userId);
+    console.log("Extracted username from token:", usernameFromToken);
 
     const userIp =
       req.headers["x-forwarded-for"]?.split(",")[0] ||
@@ -44,6 +46,15 @@ const getProjectById = async (req, res) => {
     }
 
     console.log("Project found:", project);
+    console.log("Project username:", project?.username);
+
+    // 🛑 New Strategy: Check if user is the owner
+    let status = "visitor"; // Default status
+    if (usernameFromToken === project.username) {
+      status = "admin";
+    }
+
+    console.log("User status:", status);
 
     // Check if the userId or IP has already viewed the project
     const hasViewed = project.viewers.some(
@@ -55,11 +66,8 @@ const getProjectById = async (req, res) => {
     console.log("Has user already viewed the project?", hasViewed);
 
     let viewStatus = "View count updated.";
-
-    // Always increment view counter
     let updateData = { $inc: { views: 1 } };
 
-    // If a new user is found (either by userId or IP), record it
     if (!hasViewed) {
       console.log("New viewer detected, adding to the viewers list.");
 
@@ -92,16 +100,10 @@ const getProjectById = async (req, res) => {
       { new: true }
     );
 
-    if (!updatedProject) {
-      console.log("Failed to update project with new view.");
-    } else {
-      console.log("Project successfully updated.");
-      console.log("Updated project data:", updatedProject);
-    }
-
     console.log("Final response being sent.");
     res.status(200).json({
       project: updatedProject,
+      status, // Include user status
       totalViews: updatedProject.views,
       viewers: updatedProject.viewers,
       viewStatus,

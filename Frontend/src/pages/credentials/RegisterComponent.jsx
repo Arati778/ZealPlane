@@ -48,15 +48,29 @@ export default function RegisterComponent({ showModal, handleClose }) {
       toast.success("OTP sent to your email");
       setOtpSent(true);
     } catch (err) {
-      if (err.response && err.response.data) {
-        const errorMessage = err.response.data.message;
-        if (errorMessage === "Email already exists") {
-          toast.error("This email is already available");
+      if (err.response) {
+        const errorMessage = err.response.data?.message || "Failed to send OTP";
+        if (err.response.status === 400) {
+          toast.error("Invalid request. Please check your input.");
+        } else if (err.response.status === 401) {
+          toast.error("Unauthorized request. Please log in again.");
+        } else if (err.response.status === 403) {
+          toast.error("You are not allowed to perform this action.");
+        } else if (err.response.status === 404) {
+          toast.error("API endpoint not found.");
+        } else if (err.response.status === 409) {
+          toast.error("This email is already registered.");
+        } else if (err.response.status === 500) {
+          toast.error("Internal server error. Please try again later.");
         } else {
-          toast.error(errorMessage || "Failed to send OTP");
+          toast.error(errorMessage);
         }
+      } else if (err.request) {
+        toast.error(
+          "No response from the server. Check your internet connection."
+        );
       } else {
-        toast.error("An unexpected error occurred while sending OTP");
+        toast.error("An unexpected error occurred while sending OTP.");
       }
     } finally {
       setLoading(false); // Stop loading spinner
@@ -115,10 +129,28 @@ export default function RegisterComponent({ showModal, handleClose }) {
       navigate("/login");
       handleClose();
     } catch (err) {
-      if (err.response && err.response.data) {
-        toast.error(err.response.data.message || "Registration failed");
+      if (err.response) {
+        const errorMessage =
+          err.response.data?.message || "Registration failed";
+        if (err.response.status === 400) {
+          toast.error("Invalid input. Please check your data.");
+        } else if (err.response.status === 401) {
+          toast.error("Unauthorized request. Please log in again.");
+        } else if (err.response.status === 403) {
+          toast.error("You are not authorized to perform this action.");
+        } else if (err.response.status === 404) {
+          toast.error("Registration API endpoint not found.");
+        } else if (err.response.status === 409) {
+          toast.error("Email already exists. Please use a different email.");
+        } else if (err.response.status === 500) {
+          toast.error("Internal server error. Please try again later.");
+        } else {
+          toast.error(errorMessage);
+        }
+      } else if (err.request) {
+        toast.error("No response from server. Check your network connection.");
       } else {
-        toast.error("An unexpected error occurred during registration");
+        toast.error("An unexpected error occurred during registration.");
       }
     }
   };
@@ -161,10 +193,28 @@ export default function RegisterComponent({ showModal, handleClose }) {
       navigate("/home");
     } catch (err) {
       console.error("Error handling Google Sign-In:", err);
-      if (err.response && err.response.data) {
-        toast.error(err.response.data.message || "Google Sign-in failed");
+      if (err.response) {
+        const errorMessage =
+          err.response.data?.message || "Google Sign-in failed";
+        if (err.response.status === 400) {
+          toast.error("Invalid request. Try again.");
+        } else if (err.response.status === 401) {
+          toast.error("Google authentication failed. Please try again.");
+        } else if (err.response.status === 403) {
+          toast.error(
+            "Access denied. You are not allowed to perform this action."
+          );
+        } else if (err.response.status === 404) {
+          toast.error("Google login API endpoint not found.");
+        } else if (err.response.status === 500) {
+          toast.error("Internal server error. Please try again later.");
+        } else {
+          toast.error(errorMessage);
+        }
+      } else if (err.request) {
+        toast.error("No response from server. Check your internet connection.");
       } else {
-        toast.error("An unexpected error occurred during Google Sign-In");
+        toast.error("An unexpected error occurred during Google Sign-In.");
       }
     }
   };

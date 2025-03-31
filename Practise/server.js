@@ -23,16 +23,19 @@ const cors = require("cors");
 
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
-    origin: ["http://comicplane.site", "https://comicplane.site"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true, // If you're using cookies or sessions
+    origin: [
+      "https://comicplane.site",
+      "http://localhost:5173",
+      "http://comicplane.site",
+    ], // Allow frontend origins
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow these HTTP methods
+    credentials: true, // Allow cookies and authentication
     allowedHeaders: ["Content-Type", "Authorization"], // Allow headers that might be included in the request
   })
 );
 
-// Handle preflight requests
-app.options("*", cors()); // Handle OPTIONS requests for all routes
+// ✅ Ensure OPTIONS request is handled properly
+app.options("*", cors());
 
 const port = process.env.PORT || 5000; // Default to 5000 if no PORT environment variable is set
 

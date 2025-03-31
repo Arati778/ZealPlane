@@ -29,8 +29,9 @@ const SettingsPage = () => {
         );
 
         const userData = response.data.user;
-        setContactNumber(userData.contactNumber || "");
+        setContactNumber(userData.contactNumber || ""); // ✅ API expects 'contactNumber'
         setAddress(userData.address || "");
+        setVerificationStatus(userData.verificationStatus || null);
       } catch (error) {
         console.error("Error fetching user data:", error);
         alert("Failed to fetch user data. Please try again later.");
@@ -39,26 +40,6 @@ const SettingsPage = () => {
 
     fetchUserData();
   }, [userIdLocalStorage, token, navigate]);
-
-  const handleApplyVerification = async () => {
-    if (!token) {
-      alert("Authentication token is missing. Please log in again.");
-      return;
-    }
-
-    try {
-      await axiosInstance.post(
-        "/api/verification/apply",
-        { userId: userIdLocalStorage },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setVerificationStatus("Pending");
-      alert("Verification request submitted!");
-    } catch (error) {
-      console.error("Error applying for verification:", error);
-      alert("Failed to apply for verification.");
-    }
-  };
 
   const handleUpdateInfo = async () => {
     if (!contactNumber && !address) {
@@ -74,7 +55,7 @@ const SettingsPage = () => {
     try {
       await axiosInstance.put(
         `/users/${userIdLocalStorage}`,
-        { contactNumber, address },
+        { contactNumber, address }, // ✅ API expects 'contactNumber'
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -97,10 +78,11 @@ const SettingsPage = () => {
     }
 
     try {
-      await axiosInstance.delete("/api/user/delete-account", {
+      await axiosInstance.delete(`/users/${userIdLocalStorage}/delete`, {
+        // ✅ Ensure this matches your backend
         headers: { Authorization: `Bearer ${token}` },
-        data: { userId: userIdLocalStorage },
       });
+
       alert("Account deleted successfully!");
       localStorage.clear();
       navigate("/register");
@@ -116,9 +98,34 @@ const SettingsPage = () => {
     alert("Logged out successfully!");
   };
 
+  const handleApplyVerification = async () => {
+    if (!token) {
+      alert("Authentication token is missing. Please log in again.");
+      return;
+    }
+
+    try {
+      const response = await axiosInstance.post(
+        `/users/${userIdLocalStorage}/apply-verification`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      setVerificationStatus("Pending");
+      alert(response.data.message || "Verification request submitted!");
+    } catch (error) {
+      console.error("Error applying for verification:", error);
+      alert("Failed to apply for verification.");
+    }
+  };
+
   return (
     <div className="settings-page">
       <h1>Settings</h1>
+
+      {/* Verification Section */}
       <div className="setting-item">
         <h3>Apply for Verification</h3>
         <p>
@@ -133,12 +140,14 @@ const SettingsPage = () => {
             : "Apply for Verification"}
         </button>
       </div>
+
+      {/* Contact Info Update Section */}
       <div className="setting-item">
         <h3>Update Contact Info</h3>
-        <label>Mobile Number:</label>
+        <label>Contact Number:</label> {/* ✅ Fixed to match API */}
         <input
           type="text"
-          placeholder="Enter new mobile number"
+          placeholder="Enter new contact number"
           value={contactNumber}
           onChange={(e) => setContactNumber(e.target.value)}
         />
@@ -153,6 +162,8 @@ const SettingsPage = () => {
           Update Info
         </button>
       </div>
+
+      {/* Delete Account Section */}
       <div className="setting-item">
         <h3>Delete Account</h3>
         <p>Permanently delete your account. This action cannot be undone.</p>
@@ -160,6 +171,8 @@ const SettingsPage = () => {
           Delete Account
         </button>
       </div>
+
+      {/* Logout Section */}
       <div className="setting-item">
         <h3>Log Out</h3>
         <p>Log out from your account securely.</p>

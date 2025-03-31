@@ -199,14 +199,23 @@ const ProjectComponent = () => {
       {error && <p>Error: {error.message}</p>}
 
       <div className="project-cards-container">
+        {status !== "visitor" && (
+          <Button
+            variant="contained"
+            onClick={handleOpen}
+            style={{ background: " #ff4f00", marginBottom: "5px" }}
+          >
+            Add Project
+          </Button>
+        )}
         {submittedData && submittedData.length > 0 ? (
           submittedData.map((project, index) => (
             <Card
               className="card"
               key={index}
               style={{
-                width: window.innerWidth <= 768 ? "130px" : "300px",
-                height: window.innerWidth <= 768 ? "170px" : "260px",
+                width: window.innerWidth <= 768 ? "165px" : "500px",
+                height: window.innerWidth <= 768 ? "180px" : "260px",
                 margin: "5px",
                 flex: "0 0 auto",
                 cursor: "pointer",
@@ -245,15 +254,6 @@ const ProjectComponent = () => {
           <p>No projects found.</p>
         )}
       </div>
-      {status !== "visitor" && (
-        <Button
-          variant="contained"
-          onClick={handleOpen}
-          style={{ background: " #ff4f00" }}
-        >
-          Add Project
-        </Button>
-      )}
     </div>
   );
 };

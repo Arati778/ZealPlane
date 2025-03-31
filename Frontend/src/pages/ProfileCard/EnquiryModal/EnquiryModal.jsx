@@ -1,12 +1,46 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Box, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../.../../../Auth/Axios";
 
-const EnquiryModal = ({ open, onClose, mobileNumber, emailAddress }) => {
+const EnquiryModal = ({ open, onClose, emailAddress }) => {
   const navigate = useNavigate();
+  const [contactNumber, setContactNumber] = useState("");
+
+  const userIdLocalStorage = localStorage.getItem("Id");
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchContactNumber = async () => {
+      if (!token) {
+        console.error("Authentication token is missing.");
+        return;
+      }
+
+      try {
+        const response = await axiosInstance.get(
+          `/users/${userIdLocalStorage}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        const userData = response.data.user;
+        setContactNumber(userData.contactNumber || ""); // Fetching from backend
+      } catch (error) {
+        console.error("Error fetching contact number:", error);
+      }
+    };
+
+    if (open) {
+      fetchContactNumber();
+    }
+  }, [open, userIdLocalStorage, token]);
+
+  const isValidContact = contactNumber && contactNumber.trim() !== "";
   const message = encodeURIComponent("Hi, I am interested in your project!");
-  const whatsappUrl = mobileNumber
-    ? `https://wa.me/${mobileNumber}?text=${message}`
+  const whatsappUrl = isValidContact
+    ? `https://wa.me/${contactNumber}?text=${message}`
     : null;
   const emailSubject = encodeURIComponent("Project Inquiry");
   const emailBody = encodeURIComponent("Hi, I am interested in your project!");
@@ -19,7 +53,7 @@ const EnquiryModal = ({ open, onClose, mobileNumber, emailAddress }) => {
           Contact Us
         </Typography>
 
-        {mobileNumber ? (
+        {isValidContact ? (
           <>
             <Typography sx={{ mb: 3, color: "#b8b8b8" }}>
               Choose your preferred mode of communication:
@@ -42,7 +76,7 @@ const EnquiryModal = ({ open, onClose, mobileNumber, emailAddress }) => {
               <Button
                 variant="contained"
                 sx={{
-                  bgcolor: "#F47521", // Crunchyroll Orange
+                  bgcolor: "#F47521",
                   color: "#fff",
                   "&:hover": { bgcolor: "#d45f1c" },
                 }}
@@ -55,11 +89,11 @@ const EnquiryModal = ({ open, onClose, mobileNumber, emailAddress }) => {
         ) : (
           <>
             <Typography sx={{ mb: 3, color: "#F47521", fontWeight: "bold" }}>
-              No mobile number found! Contact via email or update your number.
+              No contact number found! Contact via email or update your number.
             </Typography>
 
             <Box sx={{ display: "flex", gap: 2 }}>
-              {/* Email Button (Encouraged as primary option) */}
+              {/* Email Button */}
               <Button
                 variant="contained"
                 sx={{
@@ -72,7 +106,7 @@ const EnquiryModal = ({ open, onClose, mobileNumber, emailAddress }) => {
                 Email
               </Button>
 
-              {/* Update Mobile Button */}
+              {/* Update Contact Number */}
               <Button
                 variant="contained"
                 sx={{
@@ -82,7 +116,7 @@ const EnquiryModal = ({ open, onClose, mobileNumber, emailAddress }) => {
                 }}
                 onClick={() => navigate("/settings")}
               >
-                Update Mobile
+                Update Contact Number
               </Button>
             </Box>
           </>
@@ -101,13 +135,14 @@ const modalStyles = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "#181818", // Crunchyroll Dark Theme
+  // width: 400,
+  bgcolor: "#181818",
   borderRadius: "8px",
   boxShadow: 24,
   p: 4,
   color: "#ffffff",
-  textAlign: "center",
+  // textAlign: "center",
+  border: "0.1px solid gray",
 };
 
 export default EnquiryModal;

@@ -121,43 +121,57 @@ const DetailsPage = () => {
         );
         const userIp = ipResponse.data.ip;
 
-        // Prepare the headers
-        const headers = {
-          ...(token && { Authorization: `Bearer ${token}` }),
-        };
+        // Prepare headers
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-        // Send request with projectId, userIp, and userId
-        const response = await axiosInstance.get(
-          `${apiBaseUrl}/projects/id/${projectId}`,
-          {
-            headers,
-            params: { userId, userIp }, // Sending userId and userIp as query parameters
-          }
-        );
-        console.log("Project details are", response.data);
+        // Fetch project details only once
+        if (!projectData || projectData.id !== projectId) {
+          const response = await axiosInstance.get(
+            `${apiBaseUrl}/projects/id/${projectId}`,
+            {
+              headers,
+              params: { userId, userIp }, // Send userId and userIp as query parameters
+            }
+          );
 
-        // Set state variables with response data
-        setProjectData(response.data.project);
-        setLiked(response.data.project.likes);
-        setLikesCount(response.data.project.likes || 0);
-        setPreviousImage(response.data.project.thumbnailImages);
-        console.log("Previous images are", previousImages);
-        setStatus(response.data.status);
-        setProfilePic(response.data.project.profilePic);
-        setUserName(response.data.project.username);
-        setView(response.data.project.views); // Use updated views from backend
-        console.log("Status is", status);
-        console.log("Views are", response.data.totalViews);
+          console.log("Project details are", response.data);
 
-        // Log the view status message
-        console.log("View Status:", response.data.viewStatus);
+          // Set state variables
+          setProjectData(response.data.project);
+          setLiked(response.data.project.likes);
+          setLikesCount(response.data.project.likes || 0);
+          setPreviousImage(response.data.project.thumbnailImages);
+          console.log("Previous images are", previousImages);
+          setStatus(response.data.status);
+          setProfilePic(response.data.project.profilePic);
+          setUserName(response.data.project.username);
+          setView(response.data.project.views); // Use updated views from backend
+          console.log("Status is", status);
+          console.log("Views are", response.data.totalViews);
+          console.log("View Status:", response.data.viewStatus);
+        }
       } catch (error) {
         console.error("Error fetching project details:", error);
       }
     };
 
     fetchProjectDetails();
-  }, [projectId, token]); // Include token in dependency array to trigger when it changes
+  }, [projectId, token]); // Only re-run when projectId or token changes
+
+  const onProjectUpdate = async () => {
+    try {
+      // Instead of making another request, update only changed fields if available
+      const response = await axiosInstance.get(
+        `${apiBaseUrl}/projects/id/${projectId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      console.log("Updated project details:", response.data.project);
+      setProjectData(response.data.project);
+    } catch (error) {
+      console.error("Error refreshing project data:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -256,20 +270,6 @@ const DetailsPage = () => {
     };
     fetchProjects();
   }, []);
-
-  const onProjectUpdate = async () => {
-    try {
-      const refreshResponse = await axiosInstance.get(
-        `${apiBaseUrl}/projects/id/${projectId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      console.log("projects found are:", refreshResponse.data.project);
-
-      setProjectData(refreshResponse.data.project);
-    } catch (error) {
-      console.error("Error refreshing project data:", error);
-    }
-  };
 
   const handleUpload = async () => {
     const token = localStorage.getItem("token");

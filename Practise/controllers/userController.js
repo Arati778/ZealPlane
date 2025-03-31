@@ -16,17 +16,27 @@ const sendOtpEmail = async (email, otp) => {
     const transporter = nodemailer.createTransport({
       service: "gmail", // Use your email service
       auth: {
-        user: "krishnakumar050.kk@gmail.com", // Replace with your email
-        pass: "otscznwlkunodhty", // Replace with your email password or app password
+        user: "teamzealplane@gmail.com", // Replace with your email
+        pass: "jnyl tbel vzfb eyns", // Replace with your email password or app password
       },
     });
 
     // Email content
     const mailOptions = {
-      from: "krishnakumar050.kk@gmail.com",
+      from: "teamzealplane@gmail.com",
       to: email,
       subject: "Your OTP for Registration",
-      text: `Hello! Your OTP for registration is: ${otp}. Please enter it within the next 10 minutes.`,
+      text: `Dear User,  
+
+Thank you for registering with **ZealPlane**!  
+
+Your One-Time Password (OTP) for account verification is: **${otp}**.  
+Please enter this code within the next 10 minutes to complete your registration.  
+
+If you did not request this, please ignore this message.  
+
+Best regards,  
+The **ZealPlane Team**`,
     };
 
     // Send email
