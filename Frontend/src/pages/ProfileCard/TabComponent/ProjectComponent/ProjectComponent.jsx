@@ -203,7 +203,11 @@ const ProjectComponent = () => {
           <Button
             variant="contained"
             onClick={handleOpen}
-            style={{ background: " #ff4f00", marginBottom: "5px" }}
+            style={{
+              background: " #ff4f00",
+              marginBottom: "5px",
+              display: "flex",
+            }}
           >
             Add Project
           </Button>
